@@ -1,0 +1,33 @@
+<div class="content">
+  <h2>Mon Profil</h2>
+  <div>
+    <img src="{{pangolin.image}}">
+    <p>Nom d'utilisateur : {{ pangolin.name }}</p>
+    <p>Rôle : {{ pangolin.role }}</p>
+    <button (click)="logout()">Déconnexion</button>
+  </div>
+  <div>
+    <h4>Modifier mon rôle :</h4>
+    <form (ngSubmit)="onChangeRole()">
+      <label>
+        Rôle :
+        <select name="role" [(ngModel)]="selected_role">
+          <option *ngFor="let option of roles" [value]="option">
+            {{ option }}
+          </option>
+        </select>
+      </label>
+      <button type="submit">Mettre a jour</button>
+    </form>
+  </div>
+  <div>
+    <h4>Mes amis :</h4>
+    <ul>
+      <li *ngFor="let friend of friends">
+        {{ friend.name }}
+        <button (click)="deleteFriend(friend._id)">Supprimer</button>
+      </li>
+    </ul>
+  </div>
+  <br />
+</div>

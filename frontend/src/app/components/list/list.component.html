@@ -1,0 +1,12 @@
+<ul class="content">
+  <li *ngFor="let pangolin of pangolins">
+    <img [src]="pangolin.image" [alt]="pangolin.name" width="50" height="50" />
+    {{ pangolin.name }}
+    <button
+      *ngIf="pangolin._id != this.mainService.pangolin._id"
+      (click)="addFriend(pangolin._id)"
+    >
+      Ajouter en ami
+    </button>
+  </li>
+</ul>

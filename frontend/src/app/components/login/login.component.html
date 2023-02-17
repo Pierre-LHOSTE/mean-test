@@ -1,0 +1,22 @@
+<div id="login" class="content">
+  <h1>Login</h1>
+  <form (ngSubmit)="onSubmit()">
+    <div>
+      <label for="name">Nom</label>
+      <input type="text" id="name" name="name" [(ngModel)]="name" required />
+    </div>
+    <div>
+      <label for="password">Mot de passe</label>
+      <input
+        type="password"
+        id="password"
+        name="password"
+        [(ngModel)]="password"
+        required
+      />
+    </div>
+    <button type="submit">Connexion</button>
+    <button (click)="register()">Créer un compte</button>
+  </form>
+  <p *ngIf="message != ''">{{ message }}</p>
+</div>

@@ -1,0 +1,9 @@
+<div id="content" *ngIf="mainService.isLogged">
+  <app-profile></app-profile>
+  <app-list></app-list>
+</div>
+
+<div *ngIf="!mainService.isLogged">
+  <app-login *ngIf="!mainService.register"></app-login>
+  <app-register *ngIf="mainService.register"></app-register>
+</div>
