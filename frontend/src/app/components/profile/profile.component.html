@@ -1,9 +1,9 @@
 <div class="content">
   <h2>Mon Profil</h2>
   <div>
-    <img src="{{pangolin.image}}">
-    <p>Nom d'utilisateur : {{ pangolin.name }}</p>
-    <p>Rôle : {{ pangolin.role }}</p>
+    <img [src]="this.mainService.pangolin.image">
+    <p>Nom d'utilisateur : {{ this.mainService.pangolin.name }}</p>
+    <p>Rôle : {{ this.mainService.pangolin.role }}</p>
     <button (click)="logout()">Déconnexion</button>
   </div>
   <div>
@@ -22,10 +22,10 @@
   </div>
   <div>
     <h4>Mes amis :</h4>
-    <ul>
-      <li *ngFor="let friend of friends">
+    <ul *ngIf="this.mainService.pangolin.friends.length >= 1">
+      <li *ngFor="let friend of this.mainService.pangolin.friends">
         {{ friend.name }}
-        <button (click)="deleteFriend(friend._id)">Supprimer</button>
+        <button (click)="this.mainService.deleteFriend(friend._id)">Supprimer</button>
       </li>
     </ul>
   </div>

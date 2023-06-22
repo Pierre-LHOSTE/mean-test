@@ -3,10 +3,13 @@
     <img [src]="pangolin.image" [alt]="pangolin.name" width="50" height="50" />
     {{ pangolin.name }}
     <button
-      *ngIf="pangolin._id != this.mainService.pangolin._id"
-      (click)="addFriend(pangolin._id)"
+      *ngIf="pangolin._id != this.mainService.pangolin._id && !isPangolinFriend(pangolin)"
+      (click)="this.mainService.addFriend(pangolin._id)"
     >
       Ajouter en ami
     </button>
   </li>
+  <button (click)="registerAndAdd()" >
+    Créer un compte et ajouter le en amis
+  </button>
 </ul>

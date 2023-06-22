@@ -1,43 +1,40 @@
-import { Component, OnInit } from '@angular/core';
-import { MainService } from 'src/app/services/main.service';
-import { LoginService } from 'src/app/services/login.service';
+import { Component, OnInit } from "@angular/core";
+import { MainService } from "src/app/services/main.service";
+import { LoginService } from "src/app/services/login.service";
 
 @Component({
-  selector: 'app-register',
-  templateUrl: './register.component.html',
-  styleUrls: ['./register.component.scss'],
+  selector: "app-register",
+  templateUrl: "./register.component.html",
+  styleUrls: ["./register.component.scss"],
 })
 export class RegisterComponent implements OnInit {
-  isLogged: boolean = false;
-  name: string = '';
-  password: string = '';
-  confirm_password: string = '';
-  message = '';
+  name: string = "";
+  password: string = "";
+  confirm_password: string = "";
+  message = "";
 
   constructor(
     private mainService: MainService,
     private loginService: LoginService
   ) {}
 
-  ngOnInit(): void {
-    this.isLogged = this.mainService.isLogged;
-  }
+  ngOnInit(): void {}
 
   onSubmit() {
-    this.message = 'check data...';
+    this.message = "check data...";
 
     if (this.name && this.password.length < 3) {
-      this.message = 'Name need 3 lenght min';
+      this.message = "Name need 3 lenght min";
       return;
     }
 
     if (this.password && this.password.length < 6) {
-      this.message = 'Password need 6 lenght min';
+      this.message = "Password need 6 lenght min";
       return;
     }
 
     if (this.password != this.confirm_password) {
-      this.message = 'Passwords doesnt match';
+      this.message = "Passwords doesnt match";
       return;
     }
 
@@ -46,24 +43,29 @@ export class RegisterComponent implements OnInit {
       this.password.length >= 6 &&
       this.password == this.confirm_password
     ) {
-      this.message = 'Create account...';
-      this.loginService.register(this.name, this.password).subscribe(
-        (response) => {
+      this.message = "Create account...";
+      this.loginService.register(this.name, this.password).subscribe({
+        next: (response) => {
           if (response.pangolinCreated) {
-            this.message = '';
-            this.mainService.setLogged(true);
-            this.mainService.setPangolin(response.pangolinCreated);
+            this.message = "";
+            this.mainService.setStatus("app");
+            if (this.mainService.temp_id) {
+              this.mainService.addFriend(response.pangolinCreated._id);
+              this.mainService.setTempId("");
+            } else {
+              this.mainService.setPangolin(response.pangolinCreated);
+            }
           }
         },
-        (error) => {
+        error: (error) => {
           console.error(error);
-          this.message = 'Register failed';
-        }
-      );
+          this.message = "Register failed";
+        },
+      });
     }
   }
 
   login() {
-    this.mainService.setRegister(false);
+    this.mainService.setStatus("login");
   }
 }

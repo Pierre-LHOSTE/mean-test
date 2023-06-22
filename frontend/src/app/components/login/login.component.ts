@@ -8,7 +8,6 @@ import { LoginService } from 'src/app/services/login.service';
   styleUrls: ['./login.component.scss'],
 })
 export class LoginComponent implements OnInit {
-  isLogged: boolean = false;
   name: string = "";
   password: string = "";
   message = "";
@@ -19,27 +18,27 @@ export class LoginComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
-    this.isLogged = this.mainService.isLogged;
   }
 
   onSubmit() {
     this.message = "Login..."
     this.LoginService.login(this.name, this.password).subscribe(
-      (response) => {
-        if (response.pangolin) {
+      {next: (response) => {
+        if (response.pangolin) {       
           this.message = ""
-          this.mainService.setLogged(true);
+          this.mainService.setStatus("app");
           this.mainService.setPangolin(response.pangolin);
+          this.mainService.setToken({token: response.token, expires: response.expiresIn})
         }
       },
-      (error) => {
+      error: (error) => {
         console.error(error);
         this.message = "Login failed"
-      }
+      }}
     );
   }
 
   register() {
-    this.mainService.setRegister(true);
+    this.mainService.setStatus("register");
   }
 }

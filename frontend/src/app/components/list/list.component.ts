@@ -12,24 +12,30 @@ export class ListComponent implements OnInit {
   pangolins: Array<any> = [];
 
   constructor(
-    private loginService: LoginService,
+    public loginService: LoginService,
     public mainService: MainService,
-    private profileComponent: ProfileComponent
   ) {}
 
   ngOnInit() {
     this.loginService.getPangolins().subscribe(
-      (response) => {
+      {next: (response) => {
         this.pangolins = response.pangolins;
         console.log(this.pangolins);
       },
-      (error) => {
+      error :(error) => {
         console.error(error);
-      }
+      }}
     );
   }
 
-  addFriend(id: string) {
-    this.profileComponent.addFriend(id);
+  isPangolinFriend(pangolin: any): boolean {
+    return this.mainService.pangolin.friends.map(p=>p._id).includes(pangolin._id);
   }
+
+  registerAndAdd() {
+    this.mainService.setTempId(this.mainService.pangolin._id);
+    this.mainService.setStatus("register");
+  }
+
+  
 }

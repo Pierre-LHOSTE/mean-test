@@ -8,96 +8,39 @@ import { LoginService } from 'src/app/services/login.service';
   styleUrls: ['./profile.component.scss'],
 })
 export class ProfileComponent {
-  roles = ['guerrier', 'alchimiste', 'sorcier', 'espion', 'enchanteur'];
-  pangolin = {
-    name: '',
-    role: '',
-    friends: [''],
-    _id: '',
-    image: ""
-  };
-  friends: any[] = [];
+  roles = ['guerrier', 'alchimiste', 'sorcier', 'espion', 'enchanteur'];  
   selected_role = '';
 
   constructor(
-    private mainService: MainService,
-    private loginService: LoginService
+    public mainService: MainService,
+    public loginService: LoginService
   ) {}
 
   logout() {
-    this.mainService.setLogged(false);
+    this.mainService.setStatus("login");
+    this.mainService.resetPangolin();
+    localStorage.removeItem("token");
   }
 
   onChangeRole() {
     this.loginService
-      .changeRole(this.pangolin._id, this.selected_role)
+      .changeRole(this.mainService.pangolin._id, this.selected_role)
       .subscribe(
-        (response) => {
+        {next:(response) => {
           if (response.pangolinUpdated) {
             this.mainService.setPangolin(response.pangolinUpdated);
-            this.updateProfile();
           }
         },
-        (error) => {
+        error:(error) => {
           console.error(error);
-        }
+        }}
       );
   }
-
-  updateProfile(pangolin?: any) {
-    this.pangolin = this.mainService.pangolin;
-    this.updateFriendsList();
-  }
-
-  updateFriendsList() {
-    this.friends = [];
-    this.pangolin.friends.forEach((id) => {
-      return this.loginService.getPangolinById(id).subscribe(
-        (response) => {
-          if (response._id) {
-            this.friends = this.friends.concat([response]);
-          }
-        },
-        (error) => {
-          console.error(error);
-        }
-      );
-    });
-  }
-
-  deleteFriend(id: string) {
-    this.loginService.deleteFriend(this.pangolin._id, id).subscribe(
-      (response) => {
-        if (response.pangolinUpdated) {
-          this.mainService.setPangolin(response.pangolinUpdated);
-          this.updateProfile();
-        }
-      },
-      (error) => {
-        console.error(error);
-      }
-    );
-  }
-
-  addFriend(friend: string) {
-    this.loginService
-      .addFriend(this.mainService.pangolin._id, friend)
-      .subscribe(
-        (response) => {
-          if (response.pangolinUpdated) {
-            this.mainService.setPangolin(response.pangolinUpdated);
-            this.updateProfile();
-          }
-        },
-        (error) => {
-          console.error(error);
-        }
-      );
-  }
+  
 
   ngOnInit(): void {
-    this.pangolin = this.mainService.pangolin;
-    console.log(this.pangolin);
-    this.updateFriendsList();
+    console.log(this.mainService.pangolin);
+    
   }
 }
+

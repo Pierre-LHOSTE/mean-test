@@ -1,0 +1,31 @@
+# Dossiers
+node_modules/
+dist/
+tmp/
+logs/
+
+# Fichiers de configuration
+config.js
+
+# Fichiers de build
+build/
+
+# Fichiers de sauvegarde
+*.bak
+*.swp
+
+# Fichiers de dépendances
+package-lock.json
+yarn.lock
+
+# Fichiers d'environnement
+.env
+.env.*
+
+# Fichiers de log
+*.log
+
+# Fichiers de sauvegarde
+*.bak
+
+.angular/

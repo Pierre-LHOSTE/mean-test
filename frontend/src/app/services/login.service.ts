@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { MainService } from './main.service';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable } from 'rxjs';
 
 @Injectable({
@@ -11,13 +11,21 @@ export class LoginService {
 
   constructor(private http: HttpClient) {}
 
-  login(name: string, password: string): Observable<any> {
-    return this.http.post(this.base + '/login', { name, password });
+  login(username: string, password: string): Observable<any> {
+    return this.http.post(this.base + '/login', { username, password });
+  }
+
+  loginWithToken(token: string): Observable<any> {
+    const headers = new HttpHeaders({
+      "Authorization": `Bearer ${token}`
+    });
+    return this.http.get(this.base + '/accessResource', { headers: headers });
   }
 
   register(name: string, password: string): Observable<any> {
     return this.http.post(this.base + '/add/pangolin', { name, password });
   }
+
 
   changeRole(id: string, role: string): Observable<any> {
     return this.http.put(this.base + '/updateRole/pangolin/' + id, {
